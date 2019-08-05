@@ -1,13 +1,14 @@
-import React, { Component } from 'react'
+import React from 'react'
+import axios from 'axios'
+import { AxiosProvider } from 'react-axios-helpers'
+import Example from './Example'
 
-import ExampleComponent from 'react-axios-helpers'
-
-export default class App extends Component {
-  render () {
-    return (
-      <div>
-        <ExampleComponent text='Modern React component module' />
-      </div>
-    )
-  }
+function App() {
+  return (
+    <AxiosProvider instance={axios}>
+      <Example />
+    </AxiosProvider>
+  );
 }
+
+export default App;

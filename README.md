@@ -2,28 +2,28 @@
 
 > Axios helpers for React.
 
-[![NPM](https://img.shields.io/npm/v/react-axios-helpers.svg)](https://www.npmjs.com/package/react-axios-helpers) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
-
 ## Install
 
 ```bash
-npm install --save react-axios-helpers
+npm install react-axios-helpers
+```
+or
+```bash
+yarn add react-axios-helpers
 ```
 
 ## Usage
 
 ```jsx
-import React, { Component } from 'react'
-
-import MyComponent from 'react-axios-helpers'
-
-class Example extends Component {
-  render () {
-    return (
-      <MyComponent />
-    )
-  }
-}
+const { data, error, fetching, fetched, fetch, cancel, canceled } = useRequest({
+    config: delay => ({
+      method: 'put',
+      url: `https://www.mocky.io/v2/5185415ba171ea3a00704eed?mocky-delay=${delay}ms`
+    }),
+    onRequest: (...args) => console.info('onRequest', ...args),
+    onSuccess: (...args) => console.info('onSuccess', ...args),
+    onError: (...args) => console.info('onError', ...args),
+  }, [delay])
 ```
 
 ## License
