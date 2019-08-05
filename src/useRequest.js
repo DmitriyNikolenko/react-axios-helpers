@@ -1,6 +1,6 @@
 import { useState, useCallback, useContext, useRef, useEffect, useMemo } from 'react'
 import axios from 'axios'
-import { AxiosContext } from './AxiosContext'
+import { AxiosContext } from './axiosContext'
 import formatAxiosError from './formatAxiosError'
 
 const useRequest = ({ config, cancelOnUnmount = true, onRequest, onSuccess, onError }, deps) => {
