@@ -3,7 +3,7 @@ import axios from 'axios'
 import { AxiosContext } from './axiosContext'
 import formatAxiosError from './formatAxiosError'
 
-const useRequest = ({ config, cancelOnUnmount = true, onRequest, onSuccess, onError }, deps) => {
+const useRequest = ({ request, cancelOnUnmount = true, onRequest, onSuccess, onError }, deps) => {
   // Global axios instance.
   const { instance: axiosInstance } = useContext(AxiosContext)
   if (!axiosInstance) {
@@ -31,7 +31,7 @@ const useRequest = ({ config, cancelOnUnmount = true, onRequest, onSuccess, onEr
     source.current = axios.CancelToken.source()
 
     // Get and check axios request config.
-    const requestConfig = config(...params)
+    const requestConfig = request(...params)
     if (!requestConfig) return
 
     // Call request.
@@ -66,7 +66,7 @@ const useRequest = ({ config, cancelOnUnmount = true, onRequest, onSuccess, onEr
     } finally {
       source.current = null
     }
-  }, [axiosInstance, config])
+  }, [axiosInstance, request])
 
   // Autofetch on deps exist and changed.
   useEffect(() => {

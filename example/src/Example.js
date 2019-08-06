@@ -5,7 +5,7 @@ function Example() {
   const [delay, setDelay] = useState(5000)
 
   const { data, error, fetching, fetched, fetch, cancel, canceled } = useRequest({
-    config: delay => ({
+    request: delay => ({
       method: 'put',
       url: `https://www.mocky.io/v2/5185415ba171ea3a00704eed?mocky-delay=${delay}ms`
     }),
