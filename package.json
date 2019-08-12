@@ -1,6 +1,6 @@
 {
   "name": "react-axios-helpers",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Helpers for using axios with React.",
   "author": "Dmitriy Nikolenko <dmitriy@nikolenko@gmail.com>",
   "license": "MIT",

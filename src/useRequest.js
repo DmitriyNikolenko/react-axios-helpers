@@ -38,19 +38,19 @@ const useRequest = ({ request, cancelOnUnmount = true, onRequest, onSuccess, onE
     try {
       setRequestState(state => ({ ...state, fetching: true }))
       onRequest && onRequest(params)
-      const data = await axiosInstance({
+      const response = await axiosInstance({
         ...requestConfig,
         cancelToken: source.current.token
       })
       setRequestState(state => ({
         ...state,
-        data,
+        data: response.data,
         fetching: false,
         fetched: true,
         canceled: false,
         error: undefined
       }))
-      onSuccess && onSuccess(data, params)
+      onSuccess && onSuccess(response.data, params)
     } catch (thrown) {
       const error = formatAxiosError(thrown)
       const canceled = axios.isCancel(thrown)
