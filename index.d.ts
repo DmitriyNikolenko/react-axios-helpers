@@ -7,12 +7,16 @@ declare module 'react-axios-helpers' {
 		instance: AxiosInstance
 	}
 
-	interface TUseRequestOptions<T, P = any> {
-		request: (props: P) => AxiosRequestConfig | undefined
+	interface TUseRequestOptions<TData, TParams, TResponse = TData> {
+		request: (props: TParams) => AxiosRequestConfig | undefined | null
 		cancelOnUnmount?: boolean
-		onRequest?: (props: P) => void
-		onSuccess?: (data: T, props: P) => void
-		onError?: (error: AxiosError, props: P) => void
+		onRequest?: (props: TParams) => void
+		onSuccess?: (data: TData, props: TParams) => void
+		onError?: (error: AxiosError, props: TParams) => void
+		onCancel?: (error: AxiosError, props: TParams) => void
+		getNextFetchParams?: (prevParams: TParams, response: TResponse) => TParams
+		isCanNextFetch?: (data: TResponse, prevParams: TParams) => boolean
+		transformData?: (nextData: TResponse, prevData: TData, params: TParams) => TData
 	}
 
 	interface TUseRequestData<T> {
@@ -20,6 +24,7 @@ declare module 'react-axios-helpers' {
 		error: AxiosError
 		fetching: boolean
 		fetched: boolean
+		canNextFetch: boolean
 		fetch: () => void
 		cancel: () => void
 		canceled: boolean
