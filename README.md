@@ -41,16 +41,22 @@ const { data, error, fetching, fetched, fetch, cancel, canceled } = useRequest({
     onRequest: (params) => console.log('onRequest', params),
     onSuccess: (data, params) => console.log('onSuccess', data, params),
     onError: (error, params) => console.log('onError', error, params),
+    onCancel: (error, params) => console.log('onCancel', error, params),
   }, [delay])
 ```
 
 #### Manual call.
 ```jsx
-const { data, fetch } = useRequest({ request: () => ({  method: 'put', url: '/v2/5185415ba171ea3a00704eed' }) })
+const { data, fetch } = useRequest({ 
+  request: () => ({ 
+    url: `https://www.mocky.io/v2/5185415ba171ea3a00704eed?mocky-delay=${delay}ms` }) 
+  })
+
+fetch(200) // will fetch after call fetch()
 ```
 #### Automatic call.
 
-Will request after ever delay change?
+Will request after mount and every change delay.
 
 ```jsx
 const { data, error, fetch } = useRequest({
@@ -61,17 +67,34 @@ const { data, error, fetch } = useRequest({
   }, [delay])
 ```
 
+#### Both call methods.
+
+```jsx
+const { data, fetch } = useRequest({
+    request: (delay = 100) => ({
+      url: `https://www.mocky.io/v2/5185415ba171ea3a00704eed?mocky-delay=${delay}ms`
+    }),
+}, []) // will fetch on mount
+
+fetch(200) // will fetch after call fetch()
+```
+
 #### Avoid call.
 
 For avoiding call you will return null (or undefined) from request.
 
 ```jsx
-const { data, error, fetch } = useRequest({
-    request: delay => delay < 1000 ? null : ({
-      method: 'put',
-      url: `https://www.mocky.io/v2/5185415ba171ea3a00704eed?mocky-delay=${delay}ms`
-    }),
-  }, [delay])
+const { data, error } = useRequest({
+    request: (authorized) => authorized ? {
+      method: 'get',
+      url: `https://www.mocky.io/v2/5185415ba171ea3a00704eed?mocky-delay=2000ms`
+    } : null, // will fetch if authorized
+  }, [authorized]) // try fetch on mount and change delay value
+```
+#### Full typescript support.
+
+```ts
+useRequest<TData, TParams>()
 ```
 
 ## License

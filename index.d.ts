@@ -7,25 +7,26 @@ declare module 'react-axios-helpers' {
 		instance: AxiosInstance
 	}
 
-	interface TUseRequestOptions<T, P = any> {
-		request: (props: P) => AxiosRequestConfig | undefined
+	interface TUseRequestOptions<TData, TProps> {
+		request: (props: TProps, data: TData) => AxiosRequestConfig | undefined | null
 		cancelOnUnmount?: boolean
-		onRequest?: (props: P) => void
-		onSuccess?: (data: T, props: P) => void
-		onError?: (error: AxiosError, props: P) => void
+		onRequest?: (props: TProps) => void
+		onSuccess?: (data: TData, props: TProps) => void
+		onError?: (error: AxiosError, props: TProps) => void
+		onCancel?: (error: AxiosError, props: TProps) => void
 	}
 
-	interface TUseRequestData<T> {
-		data: T
+	interface TUseRequestData<TData, TProps> {
+		data: TData
 		error: AxiosError
 		fetching: boolean
 		fetched: boolean
-		fetch: () => void
+		fetch: (props: TProps) => Promise<void>
 		cancel: () => void
 		canceled: boolean
 	}
 
-	export const useRequest: <T, P>(options: TUseRequestOptions<T, P>, deps?: any[]) => TUseRequestData<T>
-	export const AxiosProvider: any
-	export const AxiosContext: any
+	export const useRequest: <T, P>(options: TUseRequestOptions<T, P>, deps?: any[]) => TUseRequestData<T, P>
+	export const AxiosContext: React.Context<AxiosContextInterface>
+	export const AxiosProvider: React.FC<AxiosContextInterface>
 }

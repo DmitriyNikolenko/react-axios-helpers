@@ -3,7 +3,7 @@ import axios from 'axios'
 import { AxiosContext } from './axiosContext'
 import formatAxiosError from './formatAxiosError'
 
-const useRequest = ({ request, cancelOnUnmount = true, onRequest, onSuccess, onError }, deps) => {
+const useRequest = ({ request, cancelOnUnmount = true, onRequest, onSuccess, onError, onCancel }, deps) => {
   // Global axios instance.
   const { instance: axiosInstance } = useContext(AxiosContext)
   if (!axiosInstance) {
@@ -62,7 +62,11 @@ const useRequest = ({ request, cancelOnUnmount = true, onRequest, onSuccess, onE
         data: undefined,
         fetching: false
       }))
-      onError && onError(error, params)
+      if (canceled) {
+        onCancel && onCancel(error, params)
+      } else {
+        onError && onError(error, params)
+      }
     } finally {
       source.current = null
     }
