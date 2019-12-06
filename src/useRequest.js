@@ -87,7 +87,7 @@ const useRequest = (
 
   // Autofetch on deps exist and changed.
   useEffect(() => {
-    if (deps) fetch(deps);
+    if (deps) fetch(deps[0]);
   }, deps);
 
   // Autocancel on unmount.
