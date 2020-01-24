@@ -22,18 +22,21 @@ const useRequest = (
 
   // Request state data.
   const [requestState, setRequestState] = useState({
-    fetching: false,
+    fetching: !!deps, // immediately set fetching status for deny fast switching
     fetched: false,
     canceled: false,
     error: undefined,
     data: undefined
   });
   const source = useRef(null);
-
-  // Cancel function.
-  const cancel = useCallback(message => {
-    source.current && source.current.cancel(message);
-  }, []);
+  const unmounted = useRef(false);
+  const updateRequestState = newState => {
+    if (unmounted.current) return;
+    setRequestState(currentState => ({ ...currentState, ...newState }));
+  };
+  const cancel = () => {
+    source.current && source.current.cancel("Source component will unmount.");
+  };
 
   // Fetch function.
   const fetch = useCallback(
@@ -47,32 +50,30 @@ const useRequest = (
 
       // Call request.
       try {
-        setRequestState(state => ({ ...state, fetching: true }));
+        updateRequestState({ fetching: true });
         onRequest && onRequest(params, requestState.data);
         const response = await axiosInstance({
           ...requestConfig,
           cancelToken: source.current.token
         });
-        setRequestState(state => ({
-          ...state,
+        updateRequestState({
           data: response.data,
           fetching: false,
           fetched: true,
           canceled: false,
           error: undefined
-        }));
+        });
         onSuccess && onSuccess(response.data, params);
       } catch (thrown) {
         const error = formatAxiosError(thrown);
         const canceled = axios.isCancel(thrown);
-        setRequestState(state => ({
-          ...state,
+        updateRequestState({
           canceled,
           fetched: false,
           error,
           data: undefined,
           fetching: false
-        }));
+        });
         if (canceled) {
           onCancel && onCancel(error, params);
         } else {
@@ -93,15 +94,17 @@ const useRequest = (
   // Autocancel on unmount.
   useEffect(
     () => () => {
-      if (cancelOnUnmount) cancel("Source component will unmount.");
+      unmounted.current = true;
+      if (cancelOnUnmount) {
+        cancel();
+      }
     },
     [cancelOnUnmount]
   );
 
   return useMemo(() => ({ ...requestState, fetch, cancel }), [
     requestState,
-    fetch,
-    cancel
+    fetch
   ]);
 };
 
