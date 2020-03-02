@@ -1,6 +1,6 @@
 {
   "name": "react-axios-helpers",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "Helpers for using axios with React.",
   "author": "Dmitriy Nikolenko <dmitriy@nikolenko@gmail.com>",
   "license": "MIT",
@@ -53,6 +53,6 @@
     "rollup-plugin-url": "^1.4.0"
   },
   "files": [
-    "dist"
+    "dist", "index.d.ts"
   ]
 }
