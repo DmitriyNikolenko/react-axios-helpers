@@ -10,7 +10,7 @@ export const AxiosProvider = ({ instance = axios, children }) => (
     {children}
   </AxiosContext.Provider>
 )
-
+ 
 AxiosProvider.propTypes = {
   instance: PropTypes.func,
   children: PropTypes.node.isRequired
